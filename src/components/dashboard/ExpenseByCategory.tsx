@@ -56,6 +56,16 @@ export const ExpenseByCategory = ({ expenses, budgets, month }: ExpenseByCategor
     
     setData(sortedData);
   }, [expenses, budgets, month]);
+
+  // Format currency in Indian format
+  const formatIndianCurrency = (value: number): string => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value);
+  };
   
   return (
     <Card className="col-span-1 md:col-span-2">
@@ -89,7 +99,7 @@ export const ExpenseByCategory = ({ expenses, budgets, month }: ExpenseByCategor
                   ))}
                 </Pie>
                 <Tooltip 
-                  formatter={(value: number) => `$${value.toFixed(2)}`}
+                  formatter={(value: number) => formatIndianCurrency(value)}
                 />
                 <Legend />
               </PieChart>

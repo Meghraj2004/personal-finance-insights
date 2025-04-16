@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { 
   CreditCard, 
   BarChart4, 
-  DollarSign, 
+  IndianRupee, 
   Menu, 
   X, 
   Home,
@@ -47,7 +47,7 @@ export const Sidebar = () => {
     {
       name: "Budget",
       path: "/budget",
-      icon: <DollarSign size={20} />,
+      icon: <IndianRupee size={20} />,
     },
     {
       name: "Reports",
@@ -58,6 +58,11 @@ export const Sidebar = () => {
       name: "Categories",
       path: "/categories",
       icon: <PieChart size={20} />,
+    },
+    {
+      name: "Settings",
+      path: "/settings",
+      icon: <Settings size={20} />,
     }
   ];
 
@@ -92,7 +97,7 @@ export const Sidebar = () => {
           {/* Logo */}
           <div className="px-6 py-4">
             <h1 className="text-xl font-bold flex items-center">
-              <DollarSign className="mr-2 text-primary" />
+              <IndianRupee className="mr-2 text-primary" />
               Finance Tracker
             </h1>
           </div>
@@ -122,13 +127,6 @@ export const Sidebar = () => {
 
           {/* Bottom section */}
           <div className="px-3 py-4 border-t border-border mt-auto">
-            <Link
-              to="/settings"
-              className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-            >
-              <Settings size={20} className="mr-3" />
-              Settings
-            </Link>
             <button
               onClick={handleLogout}
               className="w-full flex items-center px-3 py-2 mt-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
