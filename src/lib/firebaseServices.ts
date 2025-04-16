@@ -45,8 +45,7 @@ export const deleteExpense = async (id: string) => {
 export const getExpensesForUser = async (userId: string) => {
   const q = query(
     expensesCollection,
-    where("userId", "==", userId),
-    orderBy("date", "desc")
+    where("userId", "==", userId)
   );
   
   const querySnapshot = await getDocs(q);
@@ -61,10 +60,10 @@ export const subscribeToExpenses = (
   userId: string, 
   callback: (expenses: Expense[]) => void
 ) => {
+  // Remove the orderBy to avoid needing a composite index
   const q = query(
     expensesCollection,
-    where("userId", "==", userId),
-    orderBy("date", "desc")
+    where("userId", "==", userId)
   );
   
   return onSnapshot(q, (querySnapshot) => {
@@ -73,7 +72,12 @@ export const subscribeToExpenses = (
       ...doc.data(),
     })) as Expense[];
     
+    // Sort on the client side instead of using orderBy
+    expenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    
     callback(expenses);
+  }, (error) => {
+    console.error("Error subscribing to expenses:", error);
   });
 };
 
@@ -101,8 +105,7 @@ export const deleteBudget = async (id: string) => {
 export const getBudgetsForUser = async (userId: string) => {
   const q = query(
     budgetsCollection,
-    where("userId", "==", userId),
-    orderBy("month", "desc")
+    where("userId", "==", userId)
   );
   
   const querySnapshot = await getDocs(q);
@@ -117,10 +120,10 @@ export const subscribeToBudgets = (
   userId: string, 
   callback: (budgets: Budget[]) => void
 ) => {
+  // Remove the orderBy to avoid needing a composite index
   const q = query(
     budgetsCollection,
-    where("userId", "==", userId),
-    orderBy("month", "desc")
+    where("userId", "==", userId)
   );
   
   return onSnapshot(q, (querySnapshot) => {
@@ -129,6 +132,11 @@ export const subscribeToBudgets = (
       ...doc.data(),
     })) as Budget[];
     
+    // Sort on the client side instead of using orderBy
+    budgets.sort((a, b) => b.month.localeCompare(a.month));
+    
     callback(budgets);
+  }, (error) => {
+    console.error("Error subscribing to budgets:", error);
   });
 };

@@ -8,6 +8,8 @@ import { Expense, Budget } from "@/types/finance";
 import { format } from "date-fns";
 import { CreditCard, DollarSign, TrendingDown, TrendingUp } from "lucide-react";
 import { ExpenseByCategory } from "@/components/dashboard/ExpenseByCategory";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
@@ -24,6 +26,7 @@ const Dashboard = () => {
     const unsubscribeExpenses = subscribeToExpenses(
       currentUser.uid,
       (fetchedExpenses) => {
+        console.log("Fetched expenses:", fetchedExpenses);
         setExpenses(fetchedExpenses);
         setIsLoading(false);
       }
@@ -32,6 +35,7 @@ const Dashboard = () => {
     const unsubscribeBudgets = subscribeToBudgets(
       currentUser.uid,
       (fetchedBudgets) => {
+        console.log("Fetched budgets:", fetchedBudgets);
         setBudgets(fetchedBudgets);
       }
     );
@@ -44,10 +48,14 @@ const Dashboard = () => {
 
   // Calculate summary statistics
   const calculateStats = () => {
+    console.log("Calculating stats with", expenses.length, "expenses");
+    
     // Filter current month expenses
     const currentMonthExpenses = expenses.filter(expense => 
       expense.date.startsWith(currentMonth)
     );
+    
+    console.log("Current month expenses:", currentMonthExpenses.length);
 
     // Calculate total expenses for current month
     const totalMonthlyExpense = currentMonthExpenses.reduce(
@@ -186,6 +194,36 @@ const Dashboard = () => {
                 month={currentMonth}
               />
             </div>
+            
+            {/* Quick Links */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+                <CardDescription>Manage your finances</CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Link to="/expenses">
+                  <Button variant="outline" className="w-full">
+                    Add Expense
+                  </Button>
+                </Link>
+                <Link to="/budget">
+                  <Button variant="outline" className="w-full">
+                    Set Budget
+                  </Button>
+                </Link>
+                <Link to="/reports">
+                  <Button variant="outline" className="w-full">
+                    View Reports
+                  </Button>
+                </Link>
+                <Link to="/categories">
+                  <Button variant="outline" className="w-full">
+                    Categories
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
           </>
         )}
       </div>
